@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+<!--     Colors to be used in the app-->
+    <color name="primary">#673AB7</color>
+    <color name="dark_primary">#512DA8</color>
+    <color name="light_primary">#D1C4E9</color>
+    <color name="text_or_icons">#FFFFFF</color>
+    <color name="accent">#9E9E9E</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="divider">#BDBDBD</color>
+
+</resources>
