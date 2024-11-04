@@ -18,10 +18,18 @@ import com.project.tasknorg.databinding.ActivityMainBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 
+// Imports for the task list
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+
+    // NEW: Task list to store tasks
+    private List<Task> tasks = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +52,37 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        // NEW: Example usage of add, edit, and delete task functions
+        addTask("New Task", "This is a new task description.");
+        editTask(1L, "Updated Task", "Updated description.");
+        deleteTask(1L);
+    }
+
+    // NEW: Function to add a new task
+    private void addTask(String title, String description) {
+        Long id = (long) (tasks.size() + 1);  // Simple ID generation
+        Task newTask = new Task(id, title, description);
+        tasks.add(newTask);
+        System.out.println("Task added: " + newTask.getTitle());
+    }
+
+    // NEW: Function to edit an existing task by ID
+    private void editTask(Long id, String newTitle, String newDescription) {
+        for (Task task : tasks) {
+            if (task.getId().equals(id)) {
+                task.setTitle(newTitle);
+                task.setDescription(newDescription);
+                System.out.println("Task edited: " + task.getTitle());
+                return;
+            }
+        }
+        System.out.println("Task not found");
+    }
+
+    // NEW: Function to delete a task by ID
+    private void deleteTask(Long id) {
+        tasks.removeIf(task -> task.getId().equals(id));
+        System.out.println("Task with id " + id + " deleted");
     }
 
     @Override
