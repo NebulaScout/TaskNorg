@@ -13,18 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-// Imports for the task list
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity2 extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private FloatingActionButton mFab;
-
-    // NEW: Task list to store tasks
-//    private List<Task> tasks = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         mFab = findViewById(R.id.floatingActionButton);
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity2.this));
 
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,9 +41,5 @@ public class MainActivity extends AppCompatActivity {
                 AddNewTask.newInstance().show(getSupportFragmentManager(), AddNewTask.TAG);
             }
         });
-
     }
-
-
-
 }
