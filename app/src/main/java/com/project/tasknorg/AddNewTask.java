@@ -97,7 +97,7 @@ public class AddNewTask extends BottomSheetDialogFragment {
                 int DAY = calendar.get(Calendar.DATE);
 
                 // Display a date picker dialog
-                DatePickerDialog datePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(context, R.style.CustomDatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
                         month +=1;
@@ -151,11 +151,11 @@ public class AddNewTask extends BottomSheetDialogFragment {
     }
 
     // attach fragments on the host activity(such as the calendar dialog and toasts)
-//    @Override
-//    public void onAttach(@NonNull Context context) {
-//        super.onAttach(context);
-//        this.context = context;
-//    }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
 
     // handles dialog dismissal to enable other activities to be performed
     @Override
