@@ -1,5 +1,6 @@
 package com.project.tasknorg;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.project.tasknorg.Adapter.ToDoAdapter;
 import com.project.tasknorg.Model.ToDoModel;
@@ -27,7 +29,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnDialogCloseListener{
 
     private RecyclerView recyclerView;
     private FloatingActionButton mFab;
@@ -74,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showData() {
-        firestore.collection("task").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        firestore.collection("task").orderBy("time", Query.Direction.DESCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 for(DocumentChange documentChange : value.getDocumentChanges()) {
@@ -86,8 +89,16 @@ public class MainActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     }
                 }
-                Collections.reverse(mList);
+//                Collections.reverse(mList);
             }
         });
+    }
+
+
+    @Override
+    public void onDialogClose(DialogInterface dialogInterface) {
+        mList.clear();
+        showData();
+        adapter.notifyDataSetChanged();
     }
 }
