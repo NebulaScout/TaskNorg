@@ -42,6 +42,8 @@ public class AddNewTask extends BottomSheetDialogFragment {
     private Context context;
     private FirebaseFirestore firestore;
     private String dueDate = "";
+    private String id = "";
+    private String dueDateUpdate = "";
 
     public static AddNewTask newInstance(){
         return new AddNewTask();
@@ -62,6 +64,24 @@ public class AddNewTask extends BottomSheetDialogFragment {
         mSaveBtn = view.findViewById(R.id.save_btn);
 
         firestore = FirebaseFirestore.getInstance();
+
+        boolean isUpdate = false;
+
+        final Bundle bundle = getArguments();
+        if(bundle != null) {
+            isUpdate = true;
+            String task = bundle.getString("task");
+            id = bundle.getString("id");
+            dueDateUpdate = bundle.getString("due");
+
+            mTaskEdit.setText(task);
+            setDueDate.setText(dueDateUpdate);
+
+            if(task.length() > 0) {
+                mSaveBtn.setEnabled(false);
+                mSaveBtn.setBackgroundColor(Color.GRAY);
+            }
+        }
 
         mTaskEdit.addTextChangedListener(new TextWatcher() {
             @Override
@@ -112,39 +132,46 @@ public class AddNewTask extends BottomSheetDialogFragment {
         });
 
         // Save tasks on firestore
+        boolean finalIsUpdate = isUpdate;
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String task = mTaskEdit.getText().toString();
 
-                // check if the user has typed in a task
-                if(task.isEmpty()) {
-                    Toast.makeText(context, "Empty task not allowed!!", Toast.LENGTH_SHORT).show();
+                if(finalIsUpdate) {
+                    firestore.collection("task").document(id).update("task", task, "due", dueDate);
+                    Toast.makeText(context, "Task Updated", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Store the data in a hashmap
-                    Map<String, Object> taskMap = new HashMap<>();
 
-                    taskMap.put("task", task);
-                    taskMap.put("due", dueDate);
-                    taskMap.put("status", 0);
-                    taskMap.put("time", FieldValue.serverTimestamp());
+                    // check if the user has typed in a task
+                    if (task.isEmpty()) {
+                        Toast.makeText(context, "Empty task not allowed!!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Store the data in a hashmap
+                        Map<String, Object> taskMap = new HashMap<>();
 
-                    // send the data to cloud firestore
-                    firestore.collection("task").add(taskMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentReference> task) {
-                            if(task.isSuccessful())
-                                Toast.makeText(context, "Task Saved", Toast.LENGTH_SHORT).show();
-                            else
-                                Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        // alert user if the task was not saved
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                        taskMap.put("task", task);
+                        taskMap.put("due", dueDate);
+                        taskMap.put("status", 0);
+                        taskMap.put("time", FieldValue.serverTimestamp());
+
+                        // send the data to cloud firestore
+                        firestore.collection("task").add(taskMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentReference> task) {
+                                if (task.isSuccessful())
+                                    Toast.makeText(context, "Task Saved", Toast.LENGTH_SHORT).show();
+                                else
+                                    Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            // alert user if the task was not saved
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                 }
                 // close the add task fragment
                 dismiss();

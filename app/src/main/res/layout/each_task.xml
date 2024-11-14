@@ -16,15 +16,15 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="384dp"
+            android:layout_width="373dp"
             android:layout_height="match_parent"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="-20dp">
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/mcheckbox"
-                android:layout_width="385dp"
-                android:layout_height="43dp"
+                android:layout_width="384dp"
+                android:layout_height="45dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="16dp"
                 android:buttonTint="@color/primary_text"

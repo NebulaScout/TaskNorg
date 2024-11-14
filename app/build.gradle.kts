@@ -54,4 +54,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     // Firebase analytics
     implementation("com.google.firebase:firebase-analytics")
+
+    // Recycler view swipe decorator
+    implementation ("it.xabaras.android:recyclerview-swipedecorator:1.4")
 }
